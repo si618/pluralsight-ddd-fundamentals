@@ -1,13 +1,12 @@
 ﻿using Ardalis.Specification;
-using FrontDesk.Core.SyncedAggregates;
 
 namespace FrontDesk.Core.SyncedAggregates.Specifications
 {
-  public class RoomSpecification : Specification<Room>
-  {
-    public RoomSpecification()
+    public class RoomSpecification : Specification<Room>
     {
-      Query.OrderBy(room => room.Name);
+        public RoomSpecification()
+        {
+            Query.OrderBy(room => room.Name);
+        }
     }
-  }
 }

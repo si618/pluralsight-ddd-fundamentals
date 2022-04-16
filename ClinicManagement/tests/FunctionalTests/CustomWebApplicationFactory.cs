@@ -12,80 +12,80 @@ using Microsoft.Extensions.Logging;
 
 namespace FunctionalTests
 {
-  public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
-  {
-    private readonly string _connectionString = "Data Source=functionaltests.db";
-    private readonly SqliteConnection _connection;
-
-    public CustomWebApplicationFactory()
+    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
     {
-      _connection = new SqliteConnection(_connectionString);
-      _connection.Open();
-    }
+        private readonly string _connectionString = "Data Source=functionaltests.db";
+        private readonly SqliteConnection _connection;
 
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-      var host = builder.Build();
-
-      // Get service provider.
-      var serviceProvider = host.Services;
-
-      // Create a scope to obtain a reference to the database
-      // context (AppDbContext).
-      using (var scope = serviceProvider.CreateScope())
-      {
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<AppDbContext>();
-
-        var logger = scopedServices
-            .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-
-        // Ensure the database is created.
-        db.Database.EnsureCreated();
-
-        try
+        public CustomWebApplicationFactory()
         {
-          // Seed the database with test data.
-          var seedService = scopedServices.GetRequiredService<AppDbContextSeed>();
-          seedService.SeedAsync(new OfficeSettings().TestDate).Wait();
+            _connection = new SqliteConnection(_connectionString);
+            _connection.Open();
         }
-        catch (Exception ex)
+
+        protected override IHost CreateHost(IHostBuilder builder)
         {
-          logger.LogError(ex, "An error occurred seeding the " +
-                              $"database with test messages. Error: {ex.Message}");
-        }
-      }
+            var host = builder.Build();
 
-      host.Start();
-      return host;
-    }
+            // Get service provider.
+            var serviceProvider = host.Services;
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-      builder
-          //.UseSolutionRelativeContentRoot("tests/FunctionalTests")
-          .ConfigureServices(services =>
-          {
-            // Remove the app's ApplicationDbContext registration.
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(DbContextOptions<AppDbContext>));
-
-            if (descriptor != null)
+            // Create a scope to obtain a reference to the database
+            // context (AppDbContext).
+            using (var scope = serviceProvider.CreateScope())
             {
-              services.Remove(descriptor);
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<AppDbContext>();
+
+                var logger = scopedServices
+                    .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+
+                // Ensure the database is created.
+                db.Database.EnsureCreated();
+
+                try
+                {
+                    // Seed the database with test data.
+                    var seedService = scopedServices.GetRequiredService<AppDbContextSeed>();
+                    seedService.SeedAsync(new OfficeSettings().TestDate).Wait();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred seeding the " +
+                                        $"database with test messages. Error: {ex.Message}");
+                }
             }
 
-            services
-              .AddEntityFrameworkSqlite()
-                .AddDbContext<AppDbContext>(options =>
-                {
-                  options.UseSqlite(_connection);
-                  options.UseInternalServiceProvider(services.BuildServiceProvider());
-                });
+            host.Start();
+            return host;
+        }
 
-            // services.AddScoped<IMediator, NoOpMediator>();
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder
+                //.UseSolutionRelativeContentRoot("tests/FunctionalTests")
+                .ConfigureServices(services =>
+                {
+              // Remove the app's ApplicationDbContext registration.
+              var descriptor = services.SingleOrDefault(
+                  d => d.ServiceType ==
+                      typeof(DbContextOptions<AppDbContext>));
+
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
+
+                    services
+                .AddEntityFrameworkSqlite()
+                  .AddDbContext<AppDbContext>(options =>
+                  {
+                          options.UseSqlite(_connection);
+                          options.UseInternalServiceProvider(services.BuildServiceProvider());
+                      });
+
+              // services.AddScoped<IMediator, NoOpMediator>();
           });
+        }
     }
-  }
 }

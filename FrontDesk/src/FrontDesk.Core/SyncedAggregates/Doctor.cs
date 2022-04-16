@@ -3,19 +3,19 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.SyncedAggregates
 {
-  public class Doctor : BaseEntity<int>, IAggregateRoot
-  {
-    public Doctor(int id, string name)
+    public class Doctor : BaseEntity<int>, IAggregateRoot
     {
-      Id = id;
-      Name = name;
-    }
+        public Doctor(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
 
-    public string Name { get; private set; }
+        public string Name { get; private set; }
 
-    public override string ToString()
-    {
-      return Name.ToString();
+        public override string ToString()
+        {
+            return Name.ToString();
+        }
     }
-  }
 }

@@ -3,8 +3,8 @@ using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Core.Interfaces
 {
-  public interface IAppointmentDTORepository
-  {
-    AppointmentDto GetFromAppointment(Appointment appointment);
-  }
+    public interface IAppointmentDTORepository
+    {
+        AppointmentDto GetFromAppointment(Appointment appointment);
+    }
 }

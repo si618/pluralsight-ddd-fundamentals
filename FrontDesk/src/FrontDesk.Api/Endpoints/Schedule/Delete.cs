@@ -10,39 +10,39 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
-  /// <summary>
-  /// Not Used.
-  /// </summary>
-  public class Delete : BaseAsyncEndpoint
-    .WithRequest<DeleteScheduleRequest>
-    .WithResponse<DeleteScheduleResponse>
-  {
-    private readonly IRepository<Schedule> _repository;
-    private readonly IMapper _mapper;
-
-    public Delete(IRepository<Schedule> repository,
-      IMapper mapper)
+    /// <summary>
+    /// Not Used.
+    /// </summary>
+    public class Delete : BaseAsyncEndpoint
+      .WithRequest<DeleteScheduleRequest>
+      .WithResponse<DeleteScheduleResponse>
     {
-      _repository = repository;
-      _mapper = mapper;
+        private readonly IRepository<Schedule> _repository;
+        private readonly IMapper _mapper;
+
+        public Delete(IRepository<Schedule> repository,
+          IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        [HttpDelete(DeleteScheduleRequest.Route)]
+        [SwaggerOperation(
+            Summary = "Deletes a Schedule",
+            Description = "Deletes a Schedule",
+            OperationId = "schedules.delete",
+            Tags = new[] { "ScheduleEndpoints" })
+        ]
+        public override async Task<ActionResult<DeleteScheduleResponse>> HandleAsync([FromRoute] DeleteScheduleRequest request,
+          CancellationToken cancellationToken)
+        {
+            var response = new DeleteScheduleResponse(request.CorrelationId());
+
+            var toDelete = _mapper.Map<Schedule>(request);
+            await _repository.DeleteAsync(toDelete);
+
+            return Ok(response);
+        }
     }
-
-    [HttpDelete(DeleteScheduleRequest.Route)]
-    [SwaggerOperation(
-        Summary = "Deletes a Schedule",
-        Description = "Deletes a Schedule",
-        OperationId = "schedules.delete",
-        Tags = new[] { "ScheduleEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteScheduleResponse>> HandleAsync([FromRoute] DeleteScheduleRequest request,
-      CancellationToken cancellationToken)
-    {
-      var response = new DeleteScheduleResponse(request.CorrelationId());
-
-      var toDelete = _mapper.Map<Schedule>(request);
-      await _repository.DeleteAsync(toDelete);
-
-      return Ok(response);
-    }
-  }
 }

@@ -3,13 +3,13 @@ using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Core.Specifications
 {
-  public class ClientsIncludePatientsSpec : Specification<Client>
-  {
-    public ClientsIncludePatientsSpec()
+    public class ClientsIncludePatientsSpec : Specification<Client>
     {
-      Query
-        .Include(client => client.Patients)
-        .OrderBy(client => client.FullName);
+        public ClientsIncludePatientsSpec()
+        {
+            Query
+              .Include(client => client.Patients)
+              .OrderBy(client => client.FullName);
+        }
     }
-  }
 }

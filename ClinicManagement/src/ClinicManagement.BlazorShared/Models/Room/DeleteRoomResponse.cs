@@ -2,14 +2,14 @@
 
 namespace BlazorShared.Models.Room
 {
-  public class DeleteRoomResponse : BaseResponse
-  {
-    public DeleteRoomResponse(Guid correlationId) : base(correlationId)
+    public class DeleteRoomResponse : BaseResponse
     {
-    }
+        public DeleteRoomResponse(Guid correlationId) : base(correlationId)
+        {
+        }
 
-    public DeleteRoomResponse()
-    {
+        public DeleteRoomResponse()
+        {
+        }
     }
-  }
 }

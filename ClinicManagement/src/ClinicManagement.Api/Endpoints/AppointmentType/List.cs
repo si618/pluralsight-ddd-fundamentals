@@ -11,35 +11,35 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.AppointmentTypeEndpoints
 {
-  public class List : BaseAsyncEndpoint
-    .WithRequest<ListAppointmentTypeRequest>
-    .WithResponse<ListAppointmentTypeResponse>
-  {
-    private readonly IRepository<AppointmentType> _repository;
-    private readonly IMapper _mapper;
-
-    public List(IRepository<AppointmentType> repository, IMapper mapper)
+    public class List : BaseAsyncEndpoint
+      .WithRequest<ListAppointmentTypeRequest>
+      .WithResponse<ListAppointmentTypeResponse>
     {
-      _repository = repository;
-      _mapper = mapper;
+        private readonly IRepository<AppointmentType> _repository;
+        private readonly IMapper _mapper;
+
+        public List(IRepository<AppointmentType> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        [HttpGet("api/appointment-types")]
+        [SwaggerOperation(
+            Summary = "List Appointment Types",
+            Description = "List Appointment Types",
+            OperationId = "appointment-types.List",
+            Tags = new[] { "AppointmentTypeEndpoints" })
+        ]
+        public override async Task<ActionResult<ListAppointmentTypeResponse>> HandleAsync([FromQuery] ListAppointmentTypeRequest request, CancellationToken cancellationToken)
+        {
+            var response = new ListAppointmentTypeResponse(request.CorrelationId);
+
+            var appointmentTypes = await _repository.ListAsync();
+            response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);
+            response.Count = response.AppointmentTypes.Count;
+
+            return Ok(response);
+        }
     }
-
-    [HttpGet("api/appointment-types")]
-    [SwaggerOperation(
-        Summary = "List Appointment Types",
-        Description = "List Appointment Types",
-        OperationId = "appointment-types.List",
-        Tags = new[] { "AppointmentTypeEndpoints" })
-    ]
-    public override async Task<ActionResult<ListAppointmentTypeResponse>> HandleAsync([FromQuery] ListAppointmentTypeRequest request, CancellationToken cancellationToken)
-    {
-      var response = new ListAppointmentTypeResponse(request.CorrelationId);
-
-      var appointmentTypes = await _repository.ListAsync();
-      response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);
-      response.Count = response.AppointmentTypes.Count;
-
-      return Ok(response);
-    }
-  }
 }

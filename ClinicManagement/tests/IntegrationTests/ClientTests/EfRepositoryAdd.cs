@@ -7,33 +7,33 @@ using Xunit;
 
 namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryAdd : BaseEfRepoTestFixture
-  {
-    private readonly EfRepository<Client> _repository;
-
-    public EfRepositoryAdd()
+    public class EfRepositoryAdd : BaseEfRepoTestFixture
     {
-      _repository = GetRepository<Client>();
+        private readonly EfRepository<Client> _repository;
+
+        public EfRepositoryAdd()
+        {
+            _repository = GetRepository<Client>();
+        }
+
+        [Fact]
+        public async Task AddsClientAndSetsId()
+        {
+            var client = await AddClient();
+
+            var newClient = (await _repository.ListAsync()).FirstOrDefault();
+
+            Assert.Equal(client, newClient);
+            Assert.True(newClient?.Id > 0);
+        }
+
+        private async Task<ClinicManagement.Core.Aggregates.Client> AddClient()
+        {
+            var client = new ClientBuilder().Id(2).Build();
+
+            await _repository.AddAsync(client);
+
+            return client;
+        }
     }
-
-    [Fact]
-    public async Task AddsClientAndSetsId()
-    {
-      var client = await AddClient();
-
-      var newClient = (await _repository.ListAsync()).FirstOrDefault();
-
-      Assert.Equal(client, newClient);
-      Assert.True(newClient?.Id > 0);
-    }
-
-    private async Task<ClinicManagement.Core.Aggregates.Client> AddClient()
-    {
-      var client = new ClientBuilder().Id(2).Build();
-
-      await _repository.AddAsync(client);
-
-      return client;
-    }
-  }
 }

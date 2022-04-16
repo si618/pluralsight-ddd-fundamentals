@@ -8,25 +8,25 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.DoctorEndpoints
 {
-  [Collection("Sequential")]
-  public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
-  {
-    private readonly HttpClient _client;
-    private readonly ITestOutputHelper _outputHelper;
-
-    public List(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    [Collection("Sequential")]
+    public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-      _client = factory.CreateClient();
-      _outputHelper = outputHelper;
-    }
+        private readonly HttpClient _client;
+        private readonly ITestOutputHelper _outputHelper;
 
-    [Fact]
-    public async Task Returns3Doctors()
-    {
-      var result = await _client.GetAndDeserialize<ListDoctorResponse>(ListDoctorRequest.Route, _outputHelper);
+        public List(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+        {
+            _client = factory.CreateClient();
+            _outputHelper = outputHelper;
+        }
 
-      Assert.Equal(3, result.Doctors.Count);
-      Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");
+        [Fact]
+        public async Task Returns3Doctors()
+        {
+            var result = await _client.GetAndDeserialize<ListDoctorResponse>(ListDoctorRequest.Route, _outputHelper);
+
+            Assert.Equal(3, result.Doctors.Count);
+            Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");
+        }
     }
-  }
 }

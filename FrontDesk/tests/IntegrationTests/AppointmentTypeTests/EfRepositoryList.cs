@@ -7,26 +7,26 @@ using Xunit;
 
 namespace IntegrationTests.AppointmentTypeTests
 {
-  public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
-  {
-    public SharedDatabaseFixture Fixture { get; }
-    public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
-
-    [Fact]
-    public async Task ListsAppointmentTypeAfterAddingIt()
+    public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
     {
-      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
-      {
-        var appointmentType = new AppointmentTypeBuilder().Id(0).Build();
+        public SharedDatabaseFixture Fixture { get; }
+        public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
 
-        var repo1 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
-        await repo1.AddAsync(appointmentType);
+        [Fact]
+        public async Task ListsAppointmentTypeAfterAddingIt()
+        {
+            using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+            {
+                var appointmentType = new AppointmentTypeBuilder().Id(0).Build();
 
-        var repo2 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
-        var appointmentTypes = (await repo2.ListAsync()).ToList();
+                var repo1 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
+                await repo1.AddAsync(appointmentType);
 
-        Assert.True(appointmentTypes?.Count > 0);
-      }
+                var repo2 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
+                var appointmentTypes = (await repo2.ListAsync()).ToList();
+
+                Assert.True(appointmentTypes?.Count > 0);
+            }
+        }
     }
-  }
 }

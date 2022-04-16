@@ -1,6 +1,6 @@
 ﻿namespace BlazorShared.Models.Appointment
 {
-  public class ListAppointmentRequest : BaseRequest
-  {
-  }
+    public class ListAppointmentRequest : BaseRequest
+    {
+    }
 }

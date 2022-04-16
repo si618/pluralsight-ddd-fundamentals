@@ -12,38 +12,38 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.PatientEndpoints
 {
-  public class List : BaseAsyncEndpoint
-    .WithRequest<ListPatientRequest>
-    .WithResponse<ListPatientResponse>
-  {
-    private readonly IRepository<Client> _repository;
-    private readonly IMapper _mapper;
-
-    public List(IRepository<Client> repository, IMapper mapper)
+    public class List : BaseAsyncEndpoint
+      .WithRequest<ListPatientRequest>
+      .WithResponse<ListPatientResponse>
     {
-      _repository = repository;
-      _mapper = mapper;
+        private readonly IRepository<Client> _repository;
+        private readonly IMapper _mapper;
+
+        public List(IRepository<Client> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        [HttpGet("api/patients")]
+        [SwaggerOperation(
+            Summary = "List Patients",
+            Description = "List Patients",
+            OperationId = "patients.List",
+            Tags = new[] { "PatientEndpoints" })
+        ]
+        public override async Task<ActionResult<ListPatientResponse>> HandleAsync([FromQuery] ListPatientRequest request, CancellationToken cancellationToken)
+        {
+            var response = new ListPatientResponse(request.CorrelationId);
+
+            var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
+            var client = await _repository.GetBySpecAsync(spec);
+            if (client == null) return NotFound();
+
+            response.Patients = _mapper.Map<List<PatientDto>>(client.Patients);
+            response.Count = response.Patients.Count;
+
+            return Ok(response);
+        }
     }
-
-    [HttpGet("api/patients")]
-    [SwaggerOperation(
-        Summary = "List Patients",
-        Description = "List Patients",
-        OperationId = "patients.List",
-        Tags = new[] { "PatientEndpoints" })
-    ]
-    public override async Task<ActionResult<ListPatientResponse>> HandleAsync([FromQuery] ListPatientRequest request, CancellationToken cancellationToken)
-    {
-      var response = new ListPatientResponse(request.CorrelationId);
-
-      var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
-      var client = await _repository.GetBySpecAsync(spec);
-      if (client == null) return NotFound();
-
-      response.Patients = _mapper.Map<List<PatientDto>>(client.Patients);
-      response.Count = response.Patients.Count;
-
-      return Ok(response);
-    }
-  }
 }

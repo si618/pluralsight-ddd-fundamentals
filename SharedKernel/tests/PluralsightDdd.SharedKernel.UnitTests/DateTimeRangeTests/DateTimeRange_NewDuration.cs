@@ -4,18 +4,18 @@ using Xunit;
 
 namespace PluralsightDdd.SharedKernel.UnitTests.DateTimeRangeTests
 {
-  public class DateTimeRange_NewDuration
-  {
-    [Fact]
-    public void ReturnsNewObjectWithGivenDuration()
+    public class DateTimeRange_NewDuration
     {
-      var dtr = new DateTimeRange(DateTimes.TestDateTime, TimeSpan.FromHours(1));
+        [Fact]
+        public void ReturnsNewObjectWithGivenDuration()
+        {
+            var dtr = new DateTimeRange(DateTimes.TestDateTime, TimeSpan.FromHours(1));
 
-      var newDtr = dtr.NewDuration(TimeSpan.FromHours(2));
+            var newDtr = dtr.NewDuration(TimeSpan.FromHours(2));
 
-      dtr.Should().NotBeSameAs(newDtr);
-      newDtr.DurationInMinutes().Should().Be(120);
+            dtr.Should().NotBeSameAs(newDtr);
+            newDtr.DurationInMinutes().Should().Be(120);
+        }
     }
-  }
 
 }

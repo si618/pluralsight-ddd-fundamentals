@@ -4,63 +4,63 @@ using Ardalis.GuardClauses;
 
 namespace PluralsightDdd.SharedKernel
 {
-  public class DateTimeRange : ValueObject
-  {
-    public DateTime Start { get; private set; }
-    public DateTime End { get; private set; }
-
-    public DateTimeRange(DateTime start, DateTime end)
+    public class DateTimeRange : ValueObject
     {
-      // Ardalis.GuardClauses supports extensions with custom guards per project
-      Guard.Against.OutOfRange(start, nameof(start), start, end);
-      Start = start;
-      End = end;
-    }
+        public DateTime Start { get; private set; }
+        public DateTime End { get; private set; }
 
-    public DateTimeRange(DateTime start, TimeSpan duration) : this(start, start.Add(duration))
-    {
-    }
+        public DateTimeRange(DateTime start, DateTime end)
+        {
+            // Ardalis.GuardClauses supports extensions with custom guards per project
+            Guard.Against.OutOfRange(start, nameof(start), start, end);
+            Start = start;
+            End = end;
+        }
 
-    public int DurationInMinutes()
-    {
-      return (int)Math.Round((End - Start).TotalMinutes, 0);
-    }
+        public DateTimeRange(DateTime start, TimeSpan duration) : this(start, start.Add(duration))
+        {
+        }
 
-    public DateTimeRange NewDuration(TimeSpan newDuration)
-    {
-      return new DateTimeRange(this.Start, newDuration);
-    }
+        public int DurationInMinutes()
+        {
+            return (int)Math.Round((End - Start).TotalMinutes, 0);
+        }
 
-    public DateTimeRange NewEnd(DateTime newEnd)
-    {
-      return new DateTimeRange(this.Start, newEnd);
-    }
+        public DateTimeRange NewDuration(TimeSpan newDuration)
+        {
+            return new DateTimeRange(this.Start, newDuration);
+        }
 
-    public DateTimeRange NewStart(DateTime newStart)
-    {
-      return new DateTimeRange(newStart, this.End);
-    }
+        public DateTimeRange NewEnd(DateTime newEnd)
+        {
+            return new DateTimeRange(this.Start, newEnd);
+        }
 
-    public static DateTimeRange CreateOneDayRange(DateTime day)
-    {
-      return new DateTimeRange(day, day.AddDays(1));
-    }
+        public DateTimeRange NewStart(DateTime newStart)
+        {
+            return new DateTimeRange(newStart, this.End);
+        }
 
-    public static DateTimeRange CreateOneWeekRange(DateTime startDay)
-    {
-      return new DateTimeRange(startDay, startDay.AddDays(7));
-    }
+        public static DateTimeRange CreateOneDayRange(DateTime day)
+        {
+            return new DateTimeRange(day, day.AddDays(1));
+        }
 
-    public bool Overlaps(DateTimeRange dateTimeRange)
-    {
-      return this.Start < dateTimeRange.End &&
-          this.End > dateTimeRange.Start;
-    }
+        public static DateTimeRange CreateOneWeekRange(DateTime startDay)
+        {
+            return new DateTimeRange(startDay, startDay.AddDays(7));
+        }
 
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-      yield return Start;
-      yield return End;
+        public bool Overlaps(DateTimeRange dateTimeRange)
+        {
+            return this.Start < dateTimeRange.End &&
+                this.End > dateTimeRange.Start;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Start;
+            yield return End;
+        }
     }
-  }
 }

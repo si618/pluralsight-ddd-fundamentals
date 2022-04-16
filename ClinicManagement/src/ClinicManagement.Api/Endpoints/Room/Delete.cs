@@ -10,34 +10,34 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.RoomEndpoints
 {
-  public class Delete : BaseAsyncEndpoint
-    .WithRequest<DeleteRoomRequest>
-    .WithResponse<DeleteRoomResponse>
-  {
-    private readonly IRepository<Room> _repository;
-    private readonly IMapper _mapper;
-
-    public Delete(IRepository<Room> repository, IMapper mapper)
+    public class Delete : BaseAsyncEndpoint
+      .WithRequest<DeleteRoomRequest>
+      .WithResponse<DeleteRoomResponse>
     {
-      _repository = repository;
-      _mapper = mapper;
+        private readonly IRepository<Room> _repository;
+        private readonly IMapper _mapper;
+
+        public Delete(IRepository<Room> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        [HttpDelete("api/rooms/{id}")]
+        [SwaggerOperation(
+            Summary = "Deletes a Room",
+            Description = "Deletes a Room",
+            OperationId = "rooms.delete",
+            Tags = new[] { "RoomEndpoints" })
+        ]
+        public override async Task<ActionResult<DeleteRoomResponse>> HandleAsync([FromRoute] DeleteRoomRequest request, CancellationToken cancellationToken)
+        {
+            var response = new DeleteRoomResponse(request.CorrelationId);
+
+            var toDelete = _mapper.Map<Room>(request);
+            await _repository.DeleteAsync(toDelete);
+
+            return Ok(response);
+        }
     }
-
-    [HttpDelete("api/rooms/{id}")]
-    [SwaggerOperation(
-        Summary = "Deletes a Room",
-        Description = "Deletes a Room",
-        OperationId = "rooms.delete",
-        Tags = new[] { "RoomEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteRoomResponse>> HandleAsync([FromRoute] DeleteRoomRequest request, CancellationToken cancellationToken)
-    {
-      var response = new DeleteRoomResponse(request.CorrelationId);
-
-      var toDelete = _mapper.Map<Room>(request);
-      await _repository.DeleteAsync(toDelete);
-
-      return Ok(response);
-    }
-  }
 }

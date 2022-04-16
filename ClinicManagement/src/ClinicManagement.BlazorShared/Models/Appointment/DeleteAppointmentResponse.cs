@@ -2,15 +2,15 @@
 
 namespace BlazorShared.Models.Appointment
 {
-  public class DeleteAppointmentResponse : BaseResponse
-  {
-
-    public DeleteAppointmentResponse(Guid correlationId) : base(correlationId)
+    public class DeleteAppointmentResponse : BaseResponse
     {
-    }
 
-    public DeleteAppointmentResponse()
-    {
+        public DeleteAppointmentResponse(Guid correlationId) : base(correlationId)
+        {
+        }
+
+        public DeleteAppointmentResponse()
+        {
+        }
     }
-  }
 }

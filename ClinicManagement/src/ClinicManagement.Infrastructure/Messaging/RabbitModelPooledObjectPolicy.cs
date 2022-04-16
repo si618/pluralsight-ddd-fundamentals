@@ -7,59 +7,59 @@ using RabbitMQ.Client;
 
 namespace ClinicManagement.Infrastructure.Messaging
 {
-  // source: https://www.c-sharpcorner.com/article/publishing-rabbitmq-message-in-asp-net-core/
-  public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
-  {
-    private readonly IConnection _connection;
-    private readonly ILogger<RabbitModelPooledObjectPolicy> _logger;
-
-    public RabbitModelPooledObjectPolicy(
-      IOptions<RabbitMqConfiguration> rabbitMqOptions,
-      ILogger<RabbitModelPooledObjectPolicy> logger)
+    // source: https://www.c-sharpcorner.com/article/publishing-rabbitmq-message-in-asp-net-core/
+    public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
     {
-      _connection = GetConnection(rabbitMqOptions.Value);
-      _logger = Guard.Against.Null(logger, nameof(logger));
-    }
+        private readonly IConnection _connection;
+        private readonly ILogger<RabbitModelPooledObjectPolicy> _logger;
 
-    private IConnection GetConnection(RabbitMqConfiguration settings)
-    {
-      Guard.Against.Null(settings, nameof(settings));
-      try
-      {
-        var factory = new ConnectionFactory()
+        public RabbitModelPooledObjectPolicy(
+          IOptions<RabbitMqConfiguration> rabbitMqOptions,
+          ILogger<RabbitModelPooledObjectPolicy> logger)
         {
-          HostName = settings.Hostname,
-          UserName = settings.UserName,
-          Password = settings.Password,
-          Port = settings.Port,
-          VirtualHost = settings.VirtualHost,
-        };
+            _connection = GetConnection(rabbitMqOptions.Value);
+            _logger = Guard.Against.Null(logger, nameof(logger));
+        }
 
-        return factory.CreateConnection();
-      }
-      catch (Exception ex)
-      {
-        _logger.LogError(ex, "Failed to connect to RabbitMQ", settings);
-        throw;
-      }
-    }
+        private IConnection GetConnection(RabbitMqConfiguration settings)
+        {
+            Guard.Against.Null(settings, nameof(settings));
+            try
+            {
+                var factory = new ConnectionFactory()
+                {
+                    HostName = settings.Hostname,
+                    UserName = settings.UserName,
+                    Password = settings.Password,
+                    Port = settings.Port,
+                    VirtualHost = settings.VirtualHost,
+                };
 
-    public IModel Create()
-    {
-      return _connection.CreateModel();
-    }
+                return factory.CreateConnection();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to connect to RabbitMQ", settings);
+                throw;
+            }
+        }
 
-    public bool Return(IModel obj)
-    {
-      if (obj.IsOpen)
-      {
-        return true;
-      }
-      else
-      {
-        obj?.Dispose();
-        return false;
-      }
+        public IModel Create()
+        {
+            return _connection.CreateModel();
+        }
+
+        public bool Return(IModel obj)
+        {
+            if (obj.IsOpen)
+            {
+                return true;
+            }
+            else
+            {
+                obj?.Dispose();
+                return false;
+            }
+        }
     }
-  }
 }

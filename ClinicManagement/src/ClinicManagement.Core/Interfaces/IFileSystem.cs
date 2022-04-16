@@ -2,8 +2,8 @@
 
 namespace ClinicManagement.Core.Interfaces
 {
-  public interface IFileSystem
-  {
-    Task<bool> SavePicture(string pictureName, string pictureBase64);
-  }
+    public interface IFileSystem
+    {
+        Task<bool> SavePicture(string pictureName, string pictureBase64);
+    }
 }

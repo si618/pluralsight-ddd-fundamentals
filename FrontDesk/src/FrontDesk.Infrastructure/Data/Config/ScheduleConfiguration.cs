@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FrontDesk.Infrastructure.Data.Config
 {
-  public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
-  {
-    public void Configure(EntityTypeBuilder<Schedule> builder)
+    public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
     {
-      builder.Property(p => p.Id).ValueGeneratedNever();
-      builder.Ignore(s => s.DateRange);
+        public void Configure(EntityTypeBuilder<Schedule> builder)
+        {
+            builder.Property(p => p.Id).ValueGeneratedNever();
+            builder.Ignore(s => s.DateRange);
+        }
     }
-  }
 }

@@ -3,19 +3,19 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace ClinicManagement.Core.Aggregates
 {
-  public class Room : BaseEntity<int>, IAggregateRoot
-  {
-    public string Name { get; set; }
-
-    public Room(int id, string name)
+    public class Room : BaseEntity<int>, IAggregateRoot
     {
-      Id = id;
-      Name = name;
-    }
+        public string Name { get; set; }
 
-    public override string ToString()
-    {
-      return Name;
+        public Room(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
-  }
 }

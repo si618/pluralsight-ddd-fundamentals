@@ -1,51 +1,50 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
-using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 
 namespace FrontDesk.Infrastructure.Messaging
 {
-  // source: https://www.c-sharpcorner.com/article/publishing-rabbitmq-message-in-asp-net-core/
-  public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
-  {
-    private readonly IConnection _connection;
-
-    public RabbitModelPooledObjectPolicy(
-      IOptions<RabbitMqConfiguration> rabbitMqOptions)
+    // source: https://www.c-sharpcorner.com/article/publishing-rabbitmq-message-in-asp-net-core/
+    public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
     {
-      _connection = GetConnection(rabbitMqOptions.Value);
-    }
+        private readonly IConnection _connection;
 
-    private IConnection GetConnection(RabbitMqConfiguration settings)
-    {
-      var factory = new ConnectionFactory()
-      {
-        HostName = settings.Hostname,
-        UserName = settings.UserName,
-        Password = settings.Password,
-        Port = settings.Port,
-        VirtualHost = settings.VirtualHost,
-      };
+        public RabbitModelPooledObjectPolicy(
+          IOptions<RabbitMqConfiguration> rabbitMqOptions)
+        {
+            _connection = GetConnection(rabbitMqOptions.Value);
+        }
 
-      return factory.CreateConnection();
-    }
+        private IConnection GetConnection(RabbitMqConfiguration settings)
+        {
+            var factory = new ConnectionFactory()
+            {
+                HostName = settings.Hostname,
+                UserName = settings.UserName,
+                Password = settings.Password,
+                Port = settings.Port,
+                VirtualHost = settings.VirtualHost,
+            };
 
-    public IModel Create()
-    {
-      return _connection.CreateModel();
-    }
+            return factory.CreateConnection();
+        }
 
-    public bool Return(IModel obj)
-    {
-      if (obj.IsOpen)
-      {
-        return true;
-      }
-      else
-      {
-        obj?.Dispose();
-        return false;
-      }
+        public IModel Create()
+        {
+            return _connection.CreateModel();
+        }
+
+        public bool Return(IModel obj)
+        {
+            if (obj.IsOpen)
+            {
+                return true;
+            }
+            else
+            {
+                obj?.Dispose();
+                return false;
+            }
+        }
     }
-  }
 }

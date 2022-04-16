@@ -6,34 +6,34 @@ using Xunit;
 
 namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryGetById : BaseEfRepoTestFixture
-  {
-    private readonly EfRepository<Client> _repository;
-
-    public EfRepositoryGetById()
+    public class EfRepositoryGetById : BaseEfRepoTestFixture
     {
-      _repository = GetRepository<Client>();
+        private readonly EfRepository<Client> _repository;
+
+        public EfRepositoryGetById()
+        {
+            _repository = GetRepository<Client>();
+        }
+
+        [Fact]
+        public async Task GetsByIdClientAfterAddingIt()
+        {
+            var id = 9;
+            var client = await AddClient(id);
+
+            var newClient = await _repository.GetByIdAsync(id);
+
+            Assert.Equal(client, newClient);
+            Assert.True(newClient?.Id == id);
+        }
+
+        private async Task<ClinicManagement.Core.Aggregates.Client> AddClient(int id)
+        {
+            var client = new ClientBuilder().Id(id).Build();
+
+            await _repository.AddAsync(client);
+
+            return client;
+        }
     }
-
-    [Fact]
-    public async Task GetsByIdClientAfterAddingIt()
-    {
-      var id = 9;
-      var client = await AddClient(id);
-
-      var newClient = await _repository.GetByIdAsync(id);
-
-      Assert.Equal(client, newClient);
-      Assert.True(newClient?.Id == id);
-    }
-
-    private async Task<ClinicManagement.Core.Aggregates.Client> AddClient(int id)
-    {
-      var client = new ClientBuilder().Id(id).Build();
-
-      await _repository.AddAsync(client);
-
-      return client;
-    }
-  }
 }

@@ -9,25 +9,25 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
-  [Collection("Sequential")]
-  public class DoctorsList : IClassFixture<CustomWebApplicationFactory<Startup>>
-  {
-    private readonly HttpClient _client;
-    private readonly ITestOutputHelper _outputHelper;
-
-    public DoctorsList(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    [Collection("Sequential")]
+    public class DoctorsList : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-      _client = factory.CreateClient();
-      _outputHelper = outputHelper;
-    }
+        private readonly HttpClient _client;
+        private readonly ITestOutputHelper _outputHelper;
 
-    [Fact]
-    public async Task Returns3Doctors()
-    {
-      var result = await _client.GetAndDeserialize<ListDoctorResponse>("/api/doctors", _outputHelper);
+        public DoctorsList(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+        {
+            _client = factory.CreateClient();
+            _outputHelper = outputHelper;
+        }
 
-      Assert.Equal(3, result.Doctors.Count());
-      Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");
+        [Fact]
+        public async Task Returns3Doctors()
+        {
+            var result = await _client.GetAndDeserialize<ListDoctorResponse>("/api/doctors", _outputHelper);
+
+            Assert.Equal(3, result.Doctors.Count());
+            Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");
+        }
     }
-  }
 }

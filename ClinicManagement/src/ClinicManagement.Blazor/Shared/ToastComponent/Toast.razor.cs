@@ -2,46 +2,46 @@
 
 namespace ClinicManagement.Blazor.Shared.ToastComponent
 {
-  public partial class Toast
-  {
-    [Inject]
-    ToastService ToastService { get; set; }
+    public partial class Toast
+    {
+        [Inject]
+        ToastService ToastService { get; set; }
 
-    protected override void OnInitialized()
-    {
-      ToastService.RefreshRequested += Refresh;
-      base.OnInitialized();
-    }
-    private void Close()
-    {
-      ToastService.IsShow = false;
-    }
-
-    private string AlertType
-    {
-      get
-      {
-        if (ToastService.ToastType == ToastType.Error)
+        protected override void OnInitialized()
         {
-          return "alert-danger";
+            ToastService.RefreshRequested += Refresh;
+            base.OnInitialized();
         }
-        else if (ToastService.ToastType == ToastType.Info)
+        private void Close()
         {
-          return "alert-info";
-        }
-        else if (ToastService.ToastType == ToastType.Warning)
-        {
-          return "alert-warning";
+            ToastService.IsShow = false;
         }
 
-        return "alert-success";
-      }
-    }
+        private string AlertType
+        {
+            get
+            {
+                if (ToastService.ToastType == ToastType.Error)
+                {
+                    return "alert-danger";
+                }
+                else if (ToastService.ToastType == ToastType.Info)
+                {
+                    return "alert-info";
+                }
+                else if (ToastService.ToastType == ToastType.Warning)
+                {
+                    return "alert-warning";
+                }
 
-    private void Refresh()
-    {
-      StateHasChanged();
-    }
+                return "alert-success";
+            }
+        }
 
-  }
+        private void Refresh()
+        {
+            StateHasChanged();
+        }
+
+    }
 }

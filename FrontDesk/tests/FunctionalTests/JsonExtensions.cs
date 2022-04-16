@@ -2,17 +2,17 @@
 
 namespace FunctionalTests
 {
-  public static class JsonExtensions
-  {
-    private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    public static class JsonExtensions
     {
-      PropertyNameCaseInsensitive = true
-    };
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
-    public static T FromJson<T>(this string json) =>
-        JsonSerializer.Deserialize<T>(json, _jsonOptions);
+        public static T FromJson<T>(this string json) =>
+            JsonSerializer.Deserialize<T>(json, _jsonOptions);
 
-    public static string ToJson<T>(this T obj) =>
-        JsonSerializer.Serialize<T>(obj, _jsonOptions);
-  }
+        public static string ToJson<T>(this T obj) =>
+            JsonSerializer.Serialize<T>(obj, _jsonOptions);
+    }
 }

@@ -7,26 +7,26 @@ using Xunit;
 
 namespace IntegrationTests.RoomTests
 {
-  public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
-  {
-    public SharedDatabaseFixture Fixture { get; }
-    public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
-
-    [Fact]
-    public async Task ListsRoomAfterAddingIt()
+    public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
     {
-      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
-      {
-        var room = new RoomBuilder().WithDefaultValues().Build();
+        public SharedDatabaseFixture Fixture { get; }
+        public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
 
-        var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
-        await repo1.AddAsync(room);
+        [Fact]
+        public async Task ListsRoomAfterAddingIt()
+        {
+            using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+            {
+                var room = new RoomBuilder().WithDefaultValues().Build();
 
-        var repo2 = new EfRepository<Room>(Fixture.CreateContext(transaction));
-        var rooms = (await repo2.ListAsync()).ToList();
+                var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+                await repo1.AddAsync(room);
 
-        Assert.True(rooms?.Count > 0);
-      }
+                var repo2 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+                var rooms = (await repo2.ListAsync()).ToList();
+
+                Assert.True(rooms?.Count > 0);
+            }
+        }
     }
-  }
 }

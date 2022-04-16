@@ -3,7 +3,7 @@
 namespace VetClinicPublic.Web.Models
 {
     public class AppointmentConfirmLinkClickedIntegrationEvent
-  {
+    {
         public AppointmentConfirmLinkClickedIntegrationEvent(Guid appointmentId)
         {
             this.Id = Guid.NewGuid();

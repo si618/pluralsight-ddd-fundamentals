@@ -10,40 +10,40 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.DoctorEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
-    .WithRequest<GetByIdDoctorRequest>
-    .WithResponse<GetByIdDoctorResponse>
-  {
-    private readonly IReadRepository<Doctor> _repository;
-    private readonly IMapper _mapper;
-
-    public GetById(IReadRepository<Doctor> repository,
-      IMapper mapper)
+    public class GetById : BaseAsyncEndpoint
+      .WithRequest<GetByIdDoctorRequest>
+      .WithResponse<GetByIdDoctorResponse>
     {
-      _repository = repository;
-      _mapper = mapper;
+        private readonly IReadRepository<Doctor> _repository;
+        private readonly IMapper _mapper;
+
+        public GetById(IReadRepository<Doctor> repository,
+          IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+
+        [HttpGet("api/doctors/{DoctorId}")]
+        [SwaggerOperation(
+            Summary = "Get a Doctor by Id",
+            Description = "Gets a Doctor by Id",
+            OperationId = "doctors.GetById",
+            Tags = new[] { "DoctorEndpoints" })
+        ]
+        public override async Task<ActionResult<GetByIdDoctorResponse>> HandleAsync([FromRoute] GetByIdDoctorRequest request,
+          CancellationToken cancellationToken)
+        {
+            var response = new GetByIdDoctorResponse(request.CorrelationId());
+
+            var doctor = await _repository.GetByIdAsync(request.DoctorId);
+            if (doctor is null) return NotFound();
+
+            response.Doctor = _mapper.Map<DoctorDto>(doctor);
+
+            return Ok(response);
+        }
     }
-
-    [HttpGet("api/doctors/{DoctorId}")]
-    [SwaggerOperation(
-        Summary = "Get a Doctor by Id",
-        Description = "Gets a Doctor by Id",
-        OperationId = "doctors.GetById",
-        Tags = new[] { "DoctorEndpoints" })
-    ]
-    public override async Task<ActionResult<GetByIdDoctorResponse>> HandleAsync([FromRoute] GetByIdDoctorRequest request,
-      CancellationToken cancellationToken)
-    {
-      var response = new GetByIdDoctorResponse(request.CorrelationId());
-
-      var doctor = await _repository.GetByIdAsync(request.DoctorId);
-      if (doctor is null) return NotFound();
-
-      response.Doctor = _mapper.Map<DoctorDto>(doctor);
-
-      return Ok(response);
-    }
-  }
 
 
 }

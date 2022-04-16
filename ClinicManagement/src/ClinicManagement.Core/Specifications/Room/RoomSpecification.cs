@@ -3,11 +3,11 @@ using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Core.Specifications
 {
-  public class RoomSpecification : Specification<Room>
-  {
-    public RoomSpecification()
+    public class RoomSpecification : Specification<Room>
     {
-      Query.OrderBy(room => room.Name);
+        public RoomSpecification()
+        {
+            Query.OrderBy(room => room.Name);
+        }
     }
-  }
 }

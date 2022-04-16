@@ -2,7 +2,7 @@
 
 namespace VetClinicPublic.Web.Interfaces
 {
-  public interface ISendConfirmationEmails
+    public interface ISendConfirmationEmails
     {
         void SendConfirmationEmail(SendAppointmentConfirmationCommand appointment);
     }

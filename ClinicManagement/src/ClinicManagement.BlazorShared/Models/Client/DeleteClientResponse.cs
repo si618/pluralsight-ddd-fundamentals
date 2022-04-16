@@ -2,15 +2,15 @@
 
 namespace BlazorShared.Models.Client
 {
-  public class DeleteClientResponse : BaseResponse
-  {
-
-    public DeleteClientResponse(Guid correlationId) : base(correlationId)
+    public class DeleteClientResponse : BaseResponse
     {
-    }
 
-    public DeleteClientResponse()
-    {
+        public DeleteClientResponse(Guid correlationId) : base(correlationId)
+        {
+        }
+
+        public DeleteClientResponse()
+        {
+        }
     }
-  }
 }

@@ -7,28 +7,28 @@ using Xunit;
 
 namespace IntegrationTests.RoomTests
 {
-  public class EfRepositoryGetById : IClassFixture<SharedDatabaseFixture>
-  {
-    public SharedDatabaseFixture Fixture { get; }
-    public EfRepositoryGetById(SharedDatabaseFixture fixture) => Fixture = fixture;
-
-    [Fact]
-    public async Task GetsByIdRoomAfterAddingIt()
+    public class EfRepositoryGetById : IClassFixture<SharedDatabaseFixture>
     {
-      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
-      {
-        string name = Guid.NewGuid().ToString();
-        var room = new RoomBuilder().WithName(name).Build();
+        public SharedDatabaseFixture Fixture { get; }
+        public EfRepositoryGetById(SharedDatabaseFixture fixture) => Fixture = fixture;
 
-        var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
-        await repo1.AddAsync(room);
+        [Fact]
+        public async Task GetsByIdRoomAfterAddingIt()
+        {
+            using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+            {
+                string name = Guid.NewGuid().ToString();
+                var room = new RoomBuilder().WithName(name).Build();
 
-        var repo2 = new EfRepository<Room>(Fixture.CreateContext(transaction));
-        var roomFromDb = (await repo2.GetByIdAsync(room.Id));
+                var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+                await repo1.AddAsync(room);
 
-        Assert.Equal(room.Id, roomFromDb.Id);
-        Assert.Equal(room.Name, roomFromDb.Name);
-      }
+                var repo2 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+                var roomFromDb = (await repo2.GetByIdAsync(room.Id));
+
+                Assert.Equal(room.Id, roomFromDb.Id);
+                Assert.Equal(room.Name, roomFromDb.Name);
+            }
+        }
     }
-  }
 }

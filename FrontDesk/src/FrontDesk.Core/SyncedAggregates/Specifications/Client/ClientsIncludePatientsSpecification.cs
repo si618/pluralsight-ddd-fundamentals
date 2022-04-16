@@ -1,15 +1,14 @@
 ﻿using Ardalis.Specification;
-using FrontDesk.Core.SyncedAggregates;
 
 namespace FrontDesk.Core.SyncedAggregates.Specifications
 {
-  public class ClientsIncludePatientsSpecification : Specification<Client>
-  {
-    public ClientsIncludePatientsSpecification()
+    public class ClientsIncludePatientsSpecification : Specification<Client>
     {
-      Query
-        .Include(client => client.Patients)
-        .OrderBy(client => client.FullName);
+        public ClientsIncludePatientsSpecification()
+        {
+            Query
+              .Include(client => client.Patients)
+              .OrderBy(client => client.FullName);
+        }
     }
-  }
 }

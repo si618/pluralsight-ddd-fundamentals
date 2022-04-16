@@ -12,57 +12,57 @@ using Xunit;
 
 namespace IntegrationTests
 {
-  // https://docs.microsoft.com/en-us/ef/core/testing/sharing-databases
-  public class SharedDatabaseFixture : IDisposable
-  {
-    private static readonly object _lock = new object();
-    private static bool _databaseInitialized;
-
-    public SharedDatabaseFixture()
+    // https://docs.microsoft.com/en-us/ef/core/testing/sharing-databases
+    public class SharedDatabaseFixture : IDisposable
     {
-      Connection = new SqlConnection(@"Server=(localdb)\mssqllocaldb;Database=PluralsightDDD.FrontDesk.IntegrationTests;ConnectRetryCount=0");
+        private static readonly object _lock = new object();
+        private static bool _databaseInitialized;
 
-      Seed();
-
-      Connection.Open();
-    }
-
-    public DbConnection Connection { get; }
-
-    public AppDbContext CreateContext(DbTransaction transaction = null)
-    {
-      var context = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(Connection).Options, new Mock<IMediator>().Object);
-
-      if (transaction != null)
-      {
-        context.Database.UseTransaction(transaction);
-      }
-
-      return context;
-    }
-
-    private void Seed()
-    {
-      lock (_lock)
-      {
-        if (!_databaseInitialized)
+        public SharedDatabaseFixture()
         {
-          using (var context = CreateContext())
-          {
-            context.Database.EnsureDeleted();
-            //context.Database.EnsureCreated();
+            Connection = new SqlConnection(@"Server=(localdb)\mssqllocaldb;Database=PluralsightDDD.FrontDesk.IntegrationTests;ConnectRetryCount=0");
 
-            var logger = new LoggerFactory().CreateLogger<AppDbContextSeed>();
-            var appDbContextSeed = new AppDbContextSeed(context, logger);
-            appDbContextSeed.SeedAsync(new OfficeSettings().TestDate).Wait();
-            context.SaveChanges();
-          }
+            Seed();
 
-          _databaseInitialized = true;
+            Connection.Open();
         }
-      }
-    }
 
-    public void Dispose() => Connection.Dispose();
-  }
+        public DbConnection Connection { get; }
+
+        public AppDbContext CreateContext(DbTransaction transaction = null)
+        {
+            var context = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(Connection).Options, new Mock<IMediator>().Object);
+
+            if (transaction != null)
+            {
+                context.Database.UseTransaction(transaction);
+            }
+
+            return context;
+        }
+
+        private void Seed()
+        {
+            lock (_lock)
+            {
+                if (!_databaseInitialized)
+                {
+                    using (var context = CreateContext())
+                    {
+                        context.Database.EnsureDeleted();
+                        //context.Database.EnsureCreated();
+
+                        var logger = new LoggerFactory().CreateLogger<AppDbContextSeed>();
+                        var appDbContextSeed = new AppDbContextSeed(context, logger);
+                        appDbContextSeed.SeedAsync(new OfficeSettings().TestDate).Wait();
+                        context.SaveChanges();
+                    }
+
+                    _databaseInitialized = true;
+                }
+            }
+        }
+
+        public void Dispose() => Connection.Dispose();
+    }
 }

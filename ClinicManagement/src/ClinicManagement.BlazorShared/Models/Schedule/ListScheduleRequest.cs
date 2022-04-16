@@ -1,6 +1,6 @@
 ﻿namespace BlazorShared.Models.Schedule
 {
-  public class ListScheduleRequest : BaseRequest
-  {
-  }
+    public class ListScheduleRequest : BaseRequest
+    {
+    }
 }

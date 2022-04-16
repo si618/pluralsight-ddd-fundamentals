@@ -2,8 +2,8 @@
 
 namespace BlazorShared.Models.Appointment
 {
-  public class GetByIdAppointmentRequest : BaseRequest
-  {
-    public Guid AppointmentId { get; set; }
-  }
+    public class GetByIdAppointmentRequest : BaseRequest
+    {
+        public Guid AppointmentId { get; set; }
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace BlazorShared.Models.Schedule
 {
-  public class DeleteScheduleRequest : BaseRequest
-  {
-    public Guid Id { get; set; }
-  }
+    public class DeleteScheduleRequest : BaseRequest
+    {
+        public Guid Id { get; set; }
+    }
 }

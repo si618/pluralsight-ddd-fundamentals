@@ -6,24 +6,24 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ConfigurationEndpoints
 {
-  public class Read : BaseAsyncEndpoint
-    .WithoutRequest
-    .WithResponse<string>
-  {
-    public Read()
+    public class Read : BaseAsyncEndpoint
+      .WithoutRequest
+      .WithResponse<string>
     {
-    }
+        public Read()
+        {
+        }
 
-    [HttpGet("api/configurations")]
-    [SwaggerOperation(
-        Summary = "Read configuration settings",
-        Description = "Read configuration settingss",
-        OperationId = "Configurations.Read",
-        Tags = new[] { "ConfigurationEndpoints" })
-    ]
-    public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
-    {
-      return Ok(new OfficeSettings().TestDate.ToString());
+        [HttpGet("api/configurations")]
+        [SwaggerOperation(
+            Summary = "Read configuration settings",
+            Description = "Read configuration settingss",
+            OperationId = "Configurations.Read",
+            Tags = new[] { "ConfigurationEndpoints" })
+        ]
+        public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
+        {
+            return Ok(new OfficeSettings().TestDate.ToString());
+        }
     }
-  }
 }

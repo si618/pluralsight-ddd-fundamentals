@@ -4,14 +4,14 @@ using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Api.MappingProfiles
 {
-  public class AppointmentTypeProfile : Profile
-  {
-    public AppointmentTypeProfile()
+    public class AppointmentTypeProfile : Profile
     {
-      CreateMap<AppointmentType, AppointmentTypeDto>()
-          .ForMember(dto => dto.AppointmentTypeId, options => options.MapFrom(src => src.Id));
-      CreateMap<AppointmentTypeDto, AppointmentType>()
-          .ForMember(dto => dto.Id, options => options.MapFrom(src => src.AppointmentTypeId));
+        public AppointmentTypeProfile()
+        {
+            CreateMap<AppointmentType, AppointmentTypeDto>()
+                .ForMember(dto => dto.AppointmentTypeId, options => options.MapFrom(src => src.Id));
+            CreateMap<AppointmentTypeDto, AppointmentType>()
+                .ForMember(dto => dto.Id, options => options.MapFrom(src => src.AppointmentTypeId));
+        }
     }
-  }
 }

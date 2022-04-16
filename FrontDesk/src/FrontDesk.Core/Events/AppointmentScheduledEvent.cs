@@ -4,14 +4,14 @@ using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events
 {
-  public class AppointmentScheduledEvent : BaseDomainEvent
-  {
-    public AppointmentScheduledEvent(Appointment appointment)
+    public class AppointmentScheduledEvent : BaseDomainEvent
     {
-      AppointmentScheduled = appointment;
-    }
+        public AppointmentScheduledEvent(Appointment appointment)
+        {
+            AppointmentScheduled = appointment;
+        }
 
-    public Guid Id { get; private set; } = Guid.NewGuid();
-    public Appointment AppointmentScheduled { get; private set; }
-  }
+        public Guid Id { get; private set; } = Guid.NewGuid();
+        public Appointment AppointmentScheduled { get; private set; }
+    }
 }

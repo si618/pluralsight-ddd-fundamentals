@@ -1,7 +1,7 @@
 ﻿namespace BlazorShared.Models.Doctor
 {
-  public class DeleteDoctorRequest : BaseRequest
-  {
-    public int Id { get; set; }
-  }
+    public class DeleteDoctorRequest : BaseRequest
+    {
+        public int Id { get; set; }
+    }
 }

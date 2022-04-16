@@ -2,15 +2,15 @@
 
 namespace BlazorShared.Models.Patient
 {
-  public class DeletePatientResponse : BaseResponse
-  {
-
-    public DeletePatientResponse(Guid correlationId) : base(correlationId)
+    public class DeletePatientResponse : BaseResponse
     {
-    }
 
-    public DeletePatientResponse()
-    {
+        public DeletePatientResponse(Guid correlationId) : base(correlationId)
+        {
+        }
+
+        public DeletePatientResponse()
+        {
+        }
     }
-  }
 }
